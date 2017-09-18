@@ -43,13 +43,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import org.json.JSONObject;
 
-public class Tracker implements Hello {
+public class TrackerServer implements TrackerInterface {
 	
 	int N = -1;
 	int K = -1;
 	int portNum = -1;
 	
-    public Tracker() {}
+    public TrackerServer() {}
     public String sayHello() {
 	return "Hello, world!";
     }
@@ -63,17 +63,17 @@ public class Tracker implements Hello {
 	
     public static void main(String args[]) {
 	
-	    Tracker obj = new Tracker();
+	    TrackerServer obj = new TrackerServer();
 		if(args.length == 3){
 		obj.portNum = Integer.parseInt(args[0]);
 		obj.N = Integer.parseInt(args[1]);
 		obj.K = Integer.parseInt(args[2]);
 		}
-		Hello stub = null;
+		TrackerInterface stub = null;
 		Registry registry = null;
 	try {
 		System.err.println("Tracker Port: " + Integer.toString(obj.portNum));
-	    stub = (Hello) UnicastRemoteObject.exportObject(obj, obj.portNum);
+	    stub = (TrackerInterface) UnicastRemoteObject.exportObject(obj, obj.portNum);
 	    registry = LocateRegistry.getRegistry();
 	    registry.bind("Hey", stub);
 	    System.err.println("Tracker ready");
