@@ -11,7 +11,7 @@ public class Tracker {
         String host = (args.length < 1) ? null : args[0];
         try {
             Registry registry = LocateRegistry.getRegistry(host);
-            TrackerInterface stub = (TrackerInterface) registry.lookup("Hey");
+            TrackerInterface stub = (TrackerInterface) registry.lookup("Tracker");
             String response = stub.sayHello();
             String jsonString = stub.returnParameters();
             System.out.println("response: " + response);

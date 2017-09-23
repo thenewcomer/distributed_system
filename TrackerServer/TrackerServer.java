@@ -36,11 +36,16 @@
  * maintenance of any nuclear facility.
  */
 //package example.hello;
-	
+
+import java.util.Map;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+import player.Player;
+import player.PlayerList;
+
 import org.json.JSONObject;
 
 public class TrackerServer implements TrackerInterface {
@@ -48,18 +53,34 @@ public class TrackerServer implements TrackerInterface {
 	int N = -1;
 	int K = -1;
 	int portNum = -1;
+	PlayerList VPlayerList = new PlayerList;
 	
     public TrackerServer() {}
-    public String sayHello() {
-	return "Hello, world!";
-    }
-	public String returnParameters(){
-		JSONObject parameters = new JSONObject();
-		parameters.put("N",N);
-		parameters.put("K",K);
-		String parametersString = parameters.toString();
-		return parametersString;
+    /**
+     * This remote method is used to return N, K and a full player list.
+     * @return Map A hashmap with key "N", "K" and "Players".
+     * @throws RemoteException
+     */
+	public Map<String, Object> returnParametersPlayers(){
+        Map ParametersPlayers = new HashMap;
+		ParametersPlayers.put("N",N);
+		ParametersPlayers.put("K",K);
+        ParametersPlayers.put("PlayerList",VPlayerList);
+		return ParametersPlayers;
 	}
+    
+    public void updatePlayerList(PlayerList players) {
+		VPlayerList = players;
+    }
+
+    public void addPlayer(Player player) {
+		VPlayerList.addPlayer(player);
+    }
+
+    public void removePlayer(String userName) {
+		VPlayerList.removePlayer(userName);
+    }
+    
 	
     public static void main(String args[]) {
 	
@@ -75,12 +96,12 @@ public class TrackerServer implements TrackerInterface {
 		System.err.println("Tracker Port: " + Integer.toString(obj.portNum));
 	    stub = (TrackerInterface) UnicastRemoteObject.exportObject(obj, obj.portNum);
 	    registry = LocateRegistry.getRegistry();
-	    registry.bind("Hey", stub);
+	    registry.bind("Tracker", stub);
 	    System.err.println("Tracker ready");
 	} catch (Exception e) {
 	    try{
-			registry.unbind("Hey");
-			registry.bind("Hey",stub);
+			registry.unbind("Tracker");
+			registry.bind("Tracker",stub);
 	    	System.err.println("Tracker ready");
 	    }catch(Exception ee){
 			System.err.println("Tracker exception: " + ee.toString());

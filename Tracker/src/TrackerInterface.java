@@ -1,28 +1,37 @@
+
+import java.util.Map;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import player.Player;
+import player.PlayerList;
+
 public interface TrackerInterface extends Remote {
-    String sayHello() throws RemoteException;
-    String returnParameters() throws RemoteException;
-
     /**
-     * registe a new player
-     * @return registe success or unccess
+     * This remote method is used to return N, K and a full player list.
+     * @return Map A hashmap with key "N", "K" and "Players".
      * @throws RemoteException
      */
-    String registeNewPlayer() throws RemoteException;
+    public Map<String, Object> returnParametersPlayers() throws RemoteException;
 
     /**
-     * This function update Tracker's player list
-     * @return success or unsccess
+     * This remote method updates the Tracker player list.
+     * @param players An array of players.
      * @throws RemoteException
      */
-    String updatePlayerList(String PlayerList) throws RemoteException;
+    public void updatePlayerList(PlayerList players) throws RemoteException;
 
     /**
-     * This function return the PlayerList stored in Tracker
-     * @return Tracker's player list
+     * This method adds a player to the Tracker player list.
+     * @param player This is the player to be added.
      * @throws RemoteException
      */
-    String getPlayerList() throws RemoteException;
+    public void addPlayer(Player player) throws RemoteException;
+
+    /**
+     * This method remove a player from the Tracker player list.
+     * @param userName This is the user name of the player to be removed.
+     * @throws RemoteException
+     */
+    public void removePlayer(String userName) throws RemoteException;
 }
