@@ -37,7 +37,7 @@
  */
 //package example.hello;
 
-import java.util.Map;
+import java.util.*;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
@@ -50,45 +50,85 @@ import org.json.JSONObject;
 
 public class TrackerServer implements TrackerInterface {
 	
-	int N = -1;
-	int K = -1;
-	int portNum = -1;
-	PlayerList VPlayerList = new PlayerList;
+	private int N = -1;
+	private int K = -1;
+	private int portNum = -1;
+	PlayerList VPlayerList = new PlayerList();
 	
     public TrackerServer() {}
-    /**
+
+	/**
+	 * set N
+	 * @param n
+	 */
+	public void setN(int n) {
+		this.N = n;
+	}
+
+	/**
+	 * Set K
+	 * @param k
+	 */
+	public void setK(int k) {
+		this.K = k;
+	}
+
+	/**
+	 * Set PortNum
+	 * @param portNum
+	 */
+	public void setPortNum(int portNum) {
+		this.portNum = portNum;
+	}
+
+	/**
      * This remote method is used to return N, K and a full player list.
      * @return Map A hashmap with key "N", "K" and "Players".
      * @throws RemoteException
      */
 	public Map<String, Object> returnParametersPlayers(){
-        Map ParametersPlayers = new HashMap;
+        Map <String, Object> ParametersPlayers = new HashMap<String, Object>();
 		ParametersPlayers.put("N",N);
 		ParametersPlayers.put("K",K);
         ParametersPlayers.put("PlayerList",VPlayerList);
 		return ParametersPlayers;
 	}
-    
-    public void updatePlayerList(PlayerList players) {
+
+	/**
+	 * update the whole playerList
+	 * @param players
+	 */
+	public void updatePlayerList(PlayerList players) {
 		VPlayerList = players;
     }
 
+	/**
+	 * add one player
+	 * @param player
+	 */
     public void addPlayer(Player player) {
 		VPlayerList.addPlayer(player);
     }
 
-    public void removePlayer(String userName) {
-		VPlayerList.removePlayer(userName);
+	/**
+	 * remove on player according to the uid provided
+	 * @param uid
+	 */
+    public void removePlayer(String uid) {
+		VPlayerList.removePlayer(uid);
     }
-    
-	
-    public static void main(String args[]) {
+
+	/**
+	 * java TrackerServer portNum=0 N=7 K=8
+	 * @param args
+	 */
+	public static void main(String args[]) {
 	
 	    TrackerServer obj = new TrackerServer();
 		if(args.length == 3){
-		obj.portNum = Integer.parseInt(args[0]);
-		obj.N = Integer.parseInt(args[1]);
-		obj.K = Integer.parseInt(args[2]);
+		obj.setPortNum(Integer.parseInt(args[0]));
+		obj.setN(Integer.parseInt(args[1]));
+		obj.setK(Integer.parseInt(args[2]));
 		}
 		TrackerInterface stub = null;
 		Registry registry = null;

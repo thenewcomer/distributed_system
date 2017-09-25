@@ -1,6 +1,7 @@
 package player;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * THis is the PlayerList Class
@@ -10,14 +11,13 @@ import java.io.Serializable;
  */
 public class PlayerList implements Serializable{
 
-    private Player[] players;
+    private ArrayList<Player> players;
 
     /**
      * This method initialize an instance of PlayList
-     * @param players This is an array of players
      */
-    public PlayerList(Player[] players) {
-        this.players = players;
+    public PlayerList() {
+        this.players = new ArrayList<Player>();
     }
 
     /**
@@ -25,21 +25,39 @@ public class PlayerList implements Serializable{
      * @param player This is the player to be added
      */
     public void addPlayer(Player player) {
-
+        this.players.add(player);
     }
 
     /**
      * This method removes a player from a player list
      */
-    public void removePlayer(String userName) {
-
+    public void removePlayer(String uid) {
+        for(int arrayIndex=0;arrayIndex<this.players.size();arrayIndex++) {
+            String playerUid = this.players.get(arrayIndex).getUID();
+            if(playerUid.equals(uid)){
+                System.err.println(playerUid);
+                System.err.println(arrayIndex);
+                this.players.remove(arrayIndex);
+                --arrayIndex;
+            }
+        }
     }
 
     /**
      * This method get all players from a player list
      * @return Player[] An array of players
      */
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+
+    @Override
+    public String toString() {
+        String str = "";
+        for (Player player : this.players) {
+            str += player.toString() + " ";
+        }
+        return str;
     }
 }
